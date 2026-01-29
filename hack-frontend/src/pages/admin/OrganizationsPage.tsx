@@ -1,24 +1,14 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import {
-    LayoutDashboard,
-    Activity,
-    Clock,
-    FilePlus,
-    Users,
-    User,
-    Menu,
-    X,
     Search,
     Plus,
     Building2,
     ExternalLink,
 } from "lucide-react";
 import AdminProfile from "../../components/AdminProfile";
+import Sidebar from "../../components/Sidebar";
 
 const OrganizationsPage = () => {
-    const navigate = useNavigate();
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [currentPage, setCurrentPage] = React.useState(1);
     const itemsPerPage = 4;
 
@@ -47,38 +37,7 @@ const OrganizationsPage = () => {
 
     return (
         <div className="flex h-screen bg-ustp-navy text-white overflow-hidden font-sans relative">
-            <div className="lg:hidden fixed top-0 left-0 right-0 bg-ustp-navy/80 backdrop-blur-xl border-b border-white/5 h-16 px-4 flex items-center justify-between z-50">
-                <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl">
-                    {isSidebarOpen ? <X size={22} /> : <Menu size={22} />}
-                </button>
-                <div className="flex items-center gap-2">
-                    <img src="/vistalogo.png" alt="Logo" className="w-7 h-7" />
-                    <span className="font-bold tracking-tight">VISTA</span>
-                </div>
-                <div className="w-10"></div>
-            </div>
-
-            <aside className={`
-        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
-        lg:translate-x-0 lg:flex w-64 flex flex-col pt-20 lg:pt-12 px-8 pb-8 space-y-10 
-        fixed lg:relative inset-y-0 left-0 bg-ustp-navy z-40 transition-transform duration-300
-        overflow-y-auto scrollbar-hide
-      `}>
-                <h2 className="text-xl font-medium text-gray-400 uppercase tracking-widest pl-2">System</h2>
-                <nav className="flex flex-col space-y-6 flex-1">
-                    <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" onClick={() => { setIsSidebarOpen(false); navigate("/dashboard"); }} />
-                    <NavItem icon={<Activity size={20} />} label="Activity" onClick={() => { setIsSidebarOpen(false); navigate("/activity"); }} />
-                    <NavItem icon={<Clock size={20} />} label="Pending" onClick={() => { setIsSidebarOpen(false); navigate("/pending"); }} />
-                    <NavItem icon={<FilePlus size={20} />} label="New Document" onClick={() => { setIsSidebarOpen(false); navigate("/new-document"); }} />
-                    <NavItem icon={<Users size={20} />} label="Organizations" active onClick={() => setIsSidebarOpen(false)} />
-                    <NavItem icon={<User size={20} />} label="Profile" onClick={() => { setIsSidebarOpen(false); navigate("/profile"); }} />
-                </nav>
-                <div className="lg:hidden mt-auto pt-8 border-t border-white/10">
-                    <AdminProfile {...adminData} variant="dark" />
-                </div>
-            </aside>
-
-            {isSidebarOpen && <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={() => setIsSidebarOpen(false)} />}
+            <Sidebar activeTab="organizations" />
 
             <main className="flex-1 bg-white text-neutral-dark lg:rounded-[2.5rem] lg:my-4 lg:mr-4 p-4 lg:p-8 shadow-2xl flex flex-col lg:flex-row overflow-hidden relative">
                 <div className="flex-1 lg:px-4 pt-20 lg:pt-4 overflow-y-auto scrollbar-hide">
@@ -162,11 +121,6 @@ const OrganizationsPage = () => {
     );
 };
 
-const NavItem = ({ icon, label, active = false, onClick }: { icon: React.ReactNode; label: string; active?: boolean; onClick?: () => void; }) => (
-    <div onClick={onClick} className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${active ? "opacity-100 translate-x-2" : "opacity-60 hover:opacity-100 hover:translate-x-1"}`}>
-        <div className={`${active ? "text-ustp-gold" : "text-white group-hover:text-ustp-gold"}`}>{icon}</div>
-        <span className={`text-lg font-medium ${active ? "text-white" : "text-gray-300 group-hover:text-white"}`}>{label}</span>
-    </div>
-);
+// --- Helper Components ---
 
 export default OrganizationsPage;
