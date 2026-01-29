@@ -71,7 +71,7 @@ const Login = () => {
             {/* TYPOGRAPHY MAGIC */}
             <div className="space-y-4">
               {/* Big Gradient Title */}
-              <h1 className="text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-ustp-gold drop-shadow-sm">
+              <h1 className="text-4xl lg:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-ustp-gold drop-shadow-sm">
                 V.I.S.T.A
               </h1>
 
@@ -99,8 +99,8 @@ const Login = () => {
       </div>
 
       {/* RIGHT SIDE - ADMIN LOGIN FORM (Kept Clean) */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 bg-neutral-50">
-        <div className="w-full max-w-md bg-white p-10 rounded-2xl shadow-lg border border-gray-100">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-4 lg:p-8 bg-neutral-50">
+        <div className="w-full max-w-md bg-white p-6 lg:p-10 rounded-2xl shadow-lg border border-gray-100">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-ustp-navy">Admin Login</h2>
             <p className="text-gray-500 mt-2">
