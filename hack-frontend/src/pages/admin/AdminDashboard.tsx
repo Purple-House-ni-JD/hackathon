@@ -90,7 +90,7 @@ const AdminDashboard = () => {
             label="New Document"
             onClick={() => {
               setIsSidebarOpen(false);
-              navigate("/new-document");
+              navigate("/docs");
             }}
           />
           <NavItem

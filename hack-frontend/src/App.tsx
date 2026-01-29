@@ -6,6 +6,7 @@ import PendingPage from "./pages/admin/PendingPage";
 import NewDocumentPage from "./pages/admin/NewDocumentPage";
 import OrganizationsPage from "./pages/admin/OrganizationsPage";
 import ProfilePage from "./pages/admin/ProfilePage";
+import ManageDocs from "./pages/admin/ManageDocs";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/new-document" element={<NewDocumentPage />} />
         <Route path="/organizations" element={<OrganizationsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/docs" element={<ManageDocs />} />
       </Routes>
     </Router>
   );
