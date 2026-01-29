@@ -6,6 +6,10 @@ import PendingPage from "./pages/admin/PendingPage";
 import NewDocumentPage from "./pages/admin/NewDocumentPage";
 import OrganizationsPage from "./pages/admin/OrganizationsPage";
 import ProfilePage from "./pages/admin/ProfilePage";
+import UserDashboard from "./pages/user/UserDashboard";
+import UserDocuments from "./pages/user/UserDocuments";
+import UserTrack from "./pages/user/UserTrack";
+import UserNotifications from "./pages/user/UserNotifications";
 
 function App() {
   return (
@@ -21,6 +25,12 @@ function App() {
         <Route path="/new-document" element={<NewDocumentPage />} />
         <Route path="/organizations" element={<OrganizationsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+
+        {/* User Routes */}
+        <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/user/documents" element={<UserDocuments />} />
+        <Route path="/user/track" element={<UserTrack />} />
+        <Route path="/user/notifications" element={<UserNotifications />} />
       </Routes>
     </Router>
   );
