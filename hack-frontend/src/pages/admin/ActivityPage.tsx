@@ -173,14 +173,6 @@ const ActivityPage = () => {
               navigate("/profile");
             }}
           />
-          <NavItem icon={<Clock size={20} />} label="Pending" />
-          <NavItem
-            icon={<FilePlus size={20} />}
-            label="New Document"
-            onClick={() => navigate("/docs")}
-          />
-          <NavItem icon={<Users size={20} />} label="Organizations" />
-          <NavItem icon={<User size={20} />} label="Profile" />
         </nav>
         {/* MOBILE PROFILE */}
         <div className="lg:hidden mt-auto border-t border-white/10 pt-8">
