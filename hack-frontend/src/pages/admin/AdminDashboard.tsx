@@ -80,22 +80,34 @@ const AdminDashboard = () => {
           <NavItem
             icon={<Clock size={20} />}
             label="Pending"
-            onClick={() => setIsSidebarOpen(false)}
+            onClick={() => {
+              setIsSidebarOpen(false);
+              navigate("/pending");
+            }}
           />
           <NavItem
             icon={<FilePlus size={20} />}
             label="New Document"
-            onClick={() => setIsSidebarOpen(false)}
+            onClick={() => {
+              setIsSidebarOpen(false);
+              navigate("/new-document");
+            }}
           />
           <NavItem
             icon={<Users size={20} />}
             label="Organizations"
-            onClick={() => setIsSidebarOpen(false)}
+            onClick={() => {
+              setIsSidebarOpen(false);
+              navigate("/organizations");
+            }}
           />
           <NavItem
             icon={<User size={20} />}
             label="Profile"
-            onClick={() => setIsSidebarOpen(false)}
+            onClick={() => {
+              setIsSidebarOpen(false);
+              navigate("/profile");
+            }}
           />
         </nav>
 
@@ -236,23 +248,20 @@ const NavItem = ({
 }) => (
   <div
     onClick={onClick}
-    className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${
-      active
-        ? "opacity-100 translate-x-2"
-        : "opacity-60 hover:opacity-100 hover:translate-x-1"
-    }`}
+    className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${active
+      ? "opacity-100 translate-x-2"
+      : "opacity-60 hover:opacity-100 hover:translate-x-1"
+      }`}
   >
     <div
-      className={`${
-        active ? "text-ustp-gold" : "text-white group-hover:text-ustp-gold"
-      }`}
+      className={`${active ? "text-ustp-gold" : "text-white group-hover:text-ustp-gold"
+        }`}
     >
       {icon}
     </div>
     <span
-      className={`text-lg font-medium ${
-        active ? "text-white" : "text-gray-300 group-hover:text-white"
-      }`}
+      className={`text-lg font-medium ${active ? "text-white" : "text-gray-300 group-hover:text-white"
+        }`}
     >
       {label}
     </span>
