@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Activity,
@@ -17,13 +18,15 @@ import {
 import AdminProfile from "../../components/AdminProfile";
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   const adminData = {
     email: "osa.admin@ustp.edu.ph",
     role: "Super Admin",
     department: "Student Affairs",
-    avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&q=80"
+    avatarUrl:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&q=80",
   };
 
   return (
@@ -61,13 +64,39 @@ const AdminDashboard = () => {
             icon={<LayoutDashboard size={20} />}
             label="Dashboard"
             active
+            onClick={() => {
+              setIsSidebarOpen(false);
+              navigate("/dashboard");
+            }}
+          />
+          <NavItem
+            icon={<Activity size={20} />}
+            label="Activity"
+            onClick={() => {
+              setIsSidebarOpen(false);
+              navigate("/activity");
+            }}
+          />
+          <NavItem
+            icon={<Clock size={20} />}
+            label="Pending"
             onClick={() => setIsSidebarOpen(false)}
           />
-          <NavItem icon={<Activity size={20} />} label="Activity" onClick={() => setIsSidebarOpen(false)} />
-          <NavItem icon={<Clock size={20} />} label="Pending" onClick={() => setIsSidebarOpen(false)} />
-          <NavItem icon={<FilePlus size={20} />} label="New Document" onClick={() => setIsSidebarOpen(false)} />
-          <NavItem icon={<Users size={20} />} label="Organizations" onClick={() => setIsSidebarOpen(false)} />
-          <NavItem icon={<User size={20} />} label="Profile" onClick={() => setIsSidebarOpen(false)} />
+          <NavItem
+            icon={<FilePlus size={20} />}
+            label="New Document"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+          <NavItem
+            icon={<Users size={20} />}
+            label="Organizations"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+          <NavItem
+            icon={<User size={20} />}
+            label="Profile"
+            onClick={() => setIsSidebarOpen(false)}
+          />
         </nav>
 
         {/* ADMIN PROFILE IN SIDEBAR (Mobile/Tablet Only) */}
@@ -207,15 +236,23 @@ const NavItem = ({
 }) => (
   <div
     onClick={onClick}
-    className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${active ? "opacity-100 translate-x-2" : "opacity-60 hover:opacity-100 hover:translate-x-1"}`}
+    className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${
+      active
+        ? "opacity-100 translate-x-2"
+        : "opacity-60 hover:opacity-100 hover:translate-x-1"
+    }`}
   >
     <div
-      className={`${active ? "text-ustp-gold" : "text-white group-hover:text-ustp-gold"}`}
+      className={`${
+        active ? "text-ustp-gold" : "text-white group-hover:text-ustp-gold"
+      }`}
     >
       {icon}
     </div>
     <span
-      className={`text-lg font-medium ${active ? "text-white" : "text-gray-300 group-hover:text-white"}`}
+      className={`text-lg font-medium ${
+        active ? "text-white" : "text-gray-300 group-hover:text-white"
+      }`}
     >
       {label}
     </span>

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard"; // Import the new file
+import ActivityPage from "./pages/admin/ActivityPage";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
 
         {/* Route 2: The Dashboard */}
         <Route path="/dashboard" element={<AdminDashboard />} />
+        <Route path="/activity" element={<ActivityPage />} />
       </Routes>
     </Router>
   );
