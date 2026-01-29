@@ -47,8 +47,9 @@ const ProfilePage = () => {
 
             <aside className={`
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
-        lg:translate-x-0 lg:flex w-64 flex flex-col pt-12 px-8 pb-8 space-y-10 
+        lg:translate-x-0 lg:flex w-64 flex flex-col pt-20 lg:pt-12 px-8 pb-8 space-y-10 
         fixed lg:relative inset-y-0 left-0 bg-ustp-navy z-40 transition-transform duration-300
+        overflow-y-auto scrollbar-hide
       `}>
                 <h2 className="text-xl font-medium text-gray-400 uppercase tracking-widest pl-2">System</h2>
                 <nav className="flex flex-col space-y-6 flex-1">
@@ -64,7 +65,7 @@ const ProfilePage = () => {
             {isSidebarOpen && <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={() => setIsSidebarOpen(false)} />}
 
             <main className="flex-1 bg-white text-neutral-dark lg:rounded-[2.5rem] lg:my-4 lg:mr-4 p-4 lg:p-8 shadow-2xl flex flex-col items-center overflow-y-auto scrollbar-hide">
-                <div className="w-full max-w-4xl pt-12 lg:pt-0">
+                <div className="w-full max-w-4xl pt-20 lg:pt-0">
                     <h1 className="text-3xl lg:text-4xl font-bold text-ustp-navy mb-10 text-center lg:text-left">Edit Profile</h1>
 
                     <div className="flex flex-col lg:flex-row gap-12">

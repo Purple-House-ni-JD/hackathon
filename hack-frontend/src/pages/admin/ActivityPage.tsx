@@ -118,8 +118,9 @@ const ActivityPage = () => {
       <aside
         className={`
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
-          lg:translate-x-0 lg:flex w-64 flex flex-col pt-12 px-8 pb-8 space-y-10 
+          lg:translate-x-0 lg:flex w-64 flex flex-col pt-20 lg:pt-12 px-8 pb-8 space-y-10 
           fixed lg:relative inset-y-0 left-0 bg-ustp-navy z-40 transition-transform duration-300 ease-in-out
+          overflow-y-auto scrollbar-hide
         `}
       >
         <h2 className="text-xl font-medium text-gray-400 uppercase tracking-widest pl-2">
@@ -189,7 +190,7 @@ const ActivityPage = () => {
 
       {/* MAIN CONTENT */}
       <main className="flex-1 bg-white text-neutral-dark rounded-none lg:rounded-[2.5rem] lg:my-4 lg:mr-4 p-4 lg:p-8 shadow-2xl flex overflow-hidden relative">
-        <div className="flex-1 px-4 lg:px-8 pt-12 lg:pt-4 overflow-y-auto scrollbar-hide">
+        <div className="flex-1 px-4 lg:px-8 pt-20 lg:pt-4 overflow-y-auto scrollbar-hide">
           <h1 className="text-4xl font-bold text-ustp-navy mb-8">Activity</h1>
 
           {/* Activity Feed */}
