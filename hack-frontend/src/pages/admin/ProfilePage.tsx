@@ -52,12 +52,12 @@ const ProfilePage = () => {
       `}>
                 <h2 className="text-xl font-medium text-gray-400 uppercase tracking-widest pl-2">System</h2>
                 <nav className="flex flex-col space-y-6 flex-1">
-                    <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" onClick={() => navigate("/dashboard")} />
-                    <NavItem icon={<Activity size={20} />} label="Activity" onClick={() => navigate("/activity")} />
-                    <NavItem icon={<Clock size={20} />} label="Pending" onClick={() => navigate("/pending")} />
-                    <NavItem icon={<FilePlus size={20} />} label="New Document" onClick={() => navigate("/new-document")} />
-                    <NavItem icon={<Users size={20} />} label="Organizations" onClick={() => navigate("/organizations")} />
-                    <NavItem icon={<User size={20} />} label="Profile" active />
+                    <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" onClick={() => { setIsSidebarOpen(false); navigate("/dashboard"); }} />
+                    <NavItem icon={<Activity size={20} />} label="Activity" onClick={() => { setIsSidebarOpen(false); navigate("/activity"); }} />
+                    <NavItem icon={<Clock size={20} />} label="Pending" onClick={() => { setIsSidebarOpen(false); navigate("/pending"); }} />
+                    <NavItem icon={<FilePlus size={20} />} label="New Document" onClick={() => { setIsSidebarOpen(false); navigate("/new-document"); }} />
+                    <NavItem icon={<Users size={20} />} label="Organizations" onClick={() => { setIsSidebarOpen(false); navigate("/organizations"); }} />
+                    <NavItem icon={<User size={20} />} label="Profile" active onClick={() => setIsSidebarOpen(false)} />
                 </nav>
             </aside>
 
