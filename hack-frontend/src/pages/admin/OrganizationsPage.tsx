@@ -65,12 +65,12 @@ const OrganizationsPage = () => {
       `}>
                 <h2 className="text-xl font-medium text-gray-400 uppercase tracking-widest pl-2">System</h2>
                 <nav className="flex flex-col space-y-6 flex-1">
-                    <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" onClick={() => navigate("/dashboard")} />
-                    <NavItem icon={<Activity size={20} />} label="Activity" onClick={() => navigate("/activity")} />
-                    <NavItem icon={<Clock size={20} />} label="Pending" onClick={() => navigate("/pending")} />
-                    <NavItem icon={<FilePlus size={20} />} label="New Document" onClick={() => navigate("/new-document")} />
-                    <NavItem icon={<Users size={20} />} label="Organizations" active />
-                    <NavItem icon={<User size={20} />} label="Profile" onClick={() => navigate("/profile")} />
+                    <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" onClick={() => { setIsSidebarOpen(false); navigate("/dashboard"); }} />
+                    <NavItem icon={<Activity size={20} />} label="Activity" onClick={() => { setIsSidebarOpen(false); navigate("/activity"); }} />
+                    <NavItem icon={<Clock size={20} />} label="Pending" onClick={() => { setIsSidebarOpen(false); navigate("/pending"); }} />
+                    <NavItem icon={<FilePlus size={20} />} label="New Document" onClick={() => { setIsSidebarOpen(false); navigate("/new-document"); }} />
+                    <NavItem icon={<Users size={20} />} label="Organizations" active onClick={() => setIsSidebarOpen(false)} />
+                    <NavItem icon={<User size={20} />} label="Profile" onClick={() => { setIsSidebarOpen(false); navigate("/profile"); }} />
                 </nav>
                 <div className="lg:hidden mt-auto pt-8 border-t border-white/10">
                     <AdminProfile {...adminData} variant="dark" />

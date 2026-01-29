@@ -79,8 +79,22 @@ const NewDocumentPage = () => {
                         active
                         onClick={() => setIsSidebarOpen(false)}
                     />
-                    <NavItem icon={<Users size={20} />} label="Organizations" />
-                    <NavItem icon={<User size={20} />} label="Profile" />
+                    <NavItem
+                        icon={<Users size={20} />}
+                        label="Organizations"
+                        onClick={() => {
+                            setIsSidebarOpen(false);
+                            navigate("/organizations");
+                        }}
+                    />
+                    <NavItem
+                        icon={<User size={20} />}
+                        label="Profile"
+                        onClick={() => {
+                            setIsSidebarOpen(false);
+                            navigate("/profile");
+                        }}
+                    />
                 </nav>
                 <div className="lg:hidden mt-auto border-t border-white/10 pt-8">
                     <AdminProfile {...adminData} variant="dark" />
@@ -178,8 +192,8 @@ const NavItem = ({
     <div
         onClick={onClick}
         className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${active
-                ? "opacity-100 translate-x-2"
-                : "opacity-60 hover:opacity-100 hover:translate-x-1"
+            ? "opacity-100 translate-x-2"
+            : "opacity-60 hover:opacity-100 hover:translate-x-1"
             }`}
     >
         <div className={`${active ? "text-ustp-gold" : "text-white group-hover:text-ustp-gold"}`}>
