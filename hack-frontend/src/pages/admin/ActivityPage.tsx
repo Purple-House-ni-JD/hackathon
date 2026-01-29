@@ -69,7 +69,11 @@ const ActivityPage = () => {
             onClick={() => navigate("/activity")}
           />
           <NavItem icon={<Clock size={20} />} label="Pending" />
-          <NavItem icon={<FilePlus size={20} />} label="New Document" />
+          <NavItem
+            icon={<FilePlus size={20} />}
+            label="New Document"
+            onClick={() => navigate("/docs")}
+          />
           <NavItem icon={<Users size={20} />} label="Organizations" />
           <NavItem icon={<User size={20} />} label="Profile" />
         </nav>

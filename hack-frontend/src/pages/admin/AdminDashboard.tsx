@@ -85,7 +85,10 @@ const AdminDashboard = () => {
           <NavItem
             icon={<FilePlus size={20} />}
             label="New Document"
-            onClick={() => setIsSidebarOpen(false)}
+            onClick={() => {
+              setIsSidebarOpen(false);
+              navigate("/docs");
+            }}
           />
           <NavItem
             icon={<Users size={20} />}
