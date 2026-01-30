@@ -8,6 +8,7 @@
  * remarks, and the user who made the update. Used for accountability and
  * triggers email notifications to document submitters.
  */
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,8 @@ class DocumentStatusHistory extends Model
     use HasFactory;
 
     protected $table = 'document_status_history';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'document_id',
@@ -61,4 +64,3 @@ class DocumentStatusHistory extends Model
         return $this->hasMany(Notification::class, 'status_history_id');
     }
 }
-

@@ -17,8 +17,10 @@
  */
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentTypeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\OrganizationController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +35,9 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('dashboard/stats', [DashboardController::class, 'stats']);
+    Route::get('notifications', [NotificationController::class, 'index']);
+
     Route::apiResource('documents', DocumentController::class)->except(['update', 'destroy']);
     Route::patch('documents/{id}/status', [DocumentController::class, 'updateStatus']);
 

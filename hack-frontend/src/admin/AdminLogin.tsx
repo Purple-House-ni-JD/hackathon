@@ -1,18 +1,12 @@
 /**
- * Admin Login Page - Integrated with Backend API
- * 
- * Handles user authentication using React Query and Axios:
- * - Form submission triggers useLogin mutation hook
- * - Success: Stores JWT token in localStorage and redirects to dashboard
- * - Error: Displays validation or authentication errors to user
- * - Loading state: Shows spinner during API call
- * 
- * The login mutation automatically handles token storage and cache updates
- * through the useLogin hook, which uses authService for API communication.
+ * VISTA Login – single entry point for OSA admins and student organizations.
+ * Role-based redirect after login: admin → /dashboard, student_org → /user/dashboard.
+ * If already logged in, redirects to the correct dashboard for the user's role.
  */
 
 import React, { useState } from "react";
-import { useLogin } from "../hooks/useAuth";
+import { Navigate } from "react-router-dom";
+import { useLogin, useCurrentUser } from "../hooks/useAuth";
 import { type LoginCredentials } from "../types";
 import { AxiosError } from "axios";
 
@@ -23,6 +17,22 @@ const AdminLogin = () => {
   });
 
   const loginMutation = useLogin();
+  const { data: currentUser, isLoading: userLoading } = useCurrentUser();
+
+  if (userLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-ustp-navy">
+        <div className="animate-spin w-12 h-12 border-4 border-white border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  if (currentUser) {
+    if (currentUser.user_type === "student_org") {
+      return <Navigate to="/user/dashboard" replace />;
+    }
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,9 +113,9 @@ const AdminLogin = () => {
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-4 lg:p-8 bg-neutral-50">
         <div className="w-full max-w-md bg-white p-6 lg:p-10 rounded-2xl shadow-lg border border-gray-100">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-ustp-navy">Admin Login</h2>
+            <h2 className="text-3xl font-bold text-ustp-navy">Sign in</h2>
             <p className="text-gray-500 mt-2">
-              Enter your official credentials to access the dashboard.
+              Use your VISTA email and password. You&apos;ll be directed to the right dashboard based on your role.
             </p>
           </div>
 
@@ -198,7 +208,7 @@ const AdminLogin = () => {
                   <span>Verifying...</span>
                 </>
               ) : (
-                "Access Dashboard"
+                "Login"
               )}
             </button>
           </form>

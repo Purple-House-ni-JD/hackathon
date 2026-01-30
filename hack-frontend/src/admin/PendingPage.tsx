@@ -26,23 +26,22 @@ const STATUS_OPTIONS: { value: DocumentStatus | ""; label: string }[] = [
   { value: "Rejected", label: "Rejected" },
 ];
 
+const ITEMS_PER_PAGE = 10;
+const FETCH_PER_PAGE = 500;
+
 const PendingPage = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
+  const [clientPage, setClientPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<DocumentStatus | "">("");
-  const itemsPerPage = 10;
 
   const { data: currentUser } = useCurrentUser();
 
-  const queryParams = useMemo(() => ({
-    per_page: itemsPerPage,
-    page: currentPage,
+  const { data: documentsData, isLoading, isError } = useDocuments({
+    per_page: FETCH_PER_PAGE,
     sort_by: 'updated_at',
-    sort_order: 'desc' as const,
-  }), [currentPage]);
-
-  const { data: documentsData, isLoading, isError } = useDocuments(queryParams);
+    sort_order: 'desc',
+  });
 
   const filteredDocuments = useMemo(() => {
     const list = (documentsData?.data ?? []) as any[];
@@ -60,16 +59,27 @@ const PendingPage = () => {
       const office = ((d.current_office ?? d.currentOffice)?.name || '').toString().toLowerCase();
       const submitter = ((d.submitted_by ?? d.submittedBy)?.full_name || '').toString().toLowerCase();
       const idStr = (d.id || '').toString();
+      const docId = `doc-${d.id}`;
 
       return (
         event.includes(q) ||
         org.includes(q) ||
         office.includes(q) ||
         submitter.includes(q) ||
-        idStr.includes(q)
+        idStr.includes(q) ||
+        docId.includes(q)
       );
     });
   }, [documentsData, statusFilter, searchQuery]);
+
+  const paginatedDocuments = useMemo(() => {
+    const start = (clientPage - 1) * ITEMS_PER_PAGE;
+    return filteredDocuments.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredDocuments, clientPage]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredDocuments.length / ITEMS_PER_PAGE));
+  const from = filteredDocuments.length === 0 ? 0 : (clientPage - 1) * ITEMS_PER_PAGE + 1;
+  const to = Math.min(clientPage * ITEMS_PER_PAGE, filteredDocuments.length);
 
   const adminData = {
     email: currentUser?.email || "Loading...",
@@ -87,6 +97,10 @@ const PendingPage = () => {
         return "bg-blue-100 text-blue-700 border-blue-200";
       case "Received":
         return "bg-purple-100 text-purple-700 border-purple-200";
+      case "Approved":
+        return "bg-green-100 text-green-700 border-green-200";
+      case "Rejected":
+        return "bg-red-100 text-red-700 border-red-200";
       default:
         return "bg-gray-100 text-gray-700 border-gray-200";
     }
@@ -120,7 +134,7 @@ const PendingPage = () => {
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
-                    setCurrentPage(1);
+                    setClientPage(1);
                   }}
                   className="pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-ustp-navy/20 focus:border-ustp-navy transition-all w-full"
                 />
@@ -129,7 +143,7 @@ const PendingPage = () => {
                 value={statusFilter}
                 onChange={(e) => {
                   setStatusFilter(e.target.value as DocumentStatus | "");
-                  setCurrentPage(1);
+                  setClientPage(1);
                 }}
                 className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-ustp-navy/20 text-gray-700 min-w-[140px]"
                 aria-label="Filter by status"
@@ -182,7 +196,7 @@ const PendingPage = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50 text-sm">
-                      {filteredDocuments.map((doc) => (
+                      {paginatedDocuments.map((doc) => (
                         <tr key={doc.id} className="hover:bg-gray-50/50 transition-colors group">
                           <td className="px-6 py-4">
                             <span className="font-bold text-ustp-navy block">{doc.event_name}</span>
@@ -236,31 +250,31 @@ const PendingPage = () => {
 
               <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
                 <p className="text-xs text-gray-400 font-medium whitespace-nowrap">
-                  Showing {documentsData.from ?? 0} to {documentsData.to ?? 0} of {documentsData.total} documents
+                  Showing {from} to {to} of {filteredDocuments.length} documents
                 </p>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className={`px-4 py-2 text-xs font-bold transition-colors ${currentPage === 1 ? 'text-gray-200 cursor-not-allowed' : 'text-gray-400 hover:text-ustp-navy'}`}
+                    onClick={() => setClientPage(prev => Math.max(prev - 1, 1))}
+                    disabled={clientPage === 1}
+                    className={`px-4 py-2 text-xs font-bold transition-colors ${clientPage === 1 ? 'text-gray-200 cursor-not-allowed' : 'text-gray-400 hover:text-ustp-navy'}`}
                   >
                     Previous
                   </button>
                   <div className="flex items-center gap-1">
-                    {[...Array(documentsData.last_page)].slice(0, 5).map((_, i) => (
+                    {[...Array(totalPages)].slice(0, 5).map((_, i) => (
                       <button
                         key={i + 1}
-                        onClick={() => setCurrentPage(i + 1)}
-                        className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${currentPage === i + 1 ? 'bg-ustp-navy text-white shadow-md' : 'text-gray-400 hover:bg-gray-50'}`}
+                        onClick={() => setClientPage(i + 1)}
+                        className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${clientPage === i + 1 ? 'bg-ustp-navy text-white shadow-md' : 'text-gray-400 hover:bg-gray-50'}`}
                       >
                         {i + 1}
                       </button>
                     ))}
                   </div>
                   <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, documentsData.last_page))}
-                    disabled={currentPage === documentsData.last_page}
-                    className={`px-4 py-2 text-xs font-bold transition-colors ${currentPage === documentsData.last_page ? 'text-gray-200 cursor-not-allowed' : 'text-gray-400 hover:text-ustp-navy'}`}
+                    onClick={() => setClientPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={clientPage === totalPages}
+                    className={`px-4 py-2 text-xs font-bold transition-colors ${clientPage === totalPages ? 'text-gray-200 cursor-not-allowed' : 'text-gray-400 hover:text-ustp-navy'}`}
                   >
                     Next
                   </button>

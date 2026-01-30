@@ -1,7 +1,8 @@
 /**
- * App root: routing and React Query provider. CRUD flows use existing backend APIs;
- * organization and document detail/update routes (/organizations/:id, /documents/:id)
- * are handled here. No backend changes; mutations invalidate queries via hooks.
+ * App root: routing and React Query provider.
+ * - Single entry point at / (login). Role-based redirect after login.
+ * - Admin routes: only admin can access; student_org is redirected to /user/dashboard.
+ * - User routes: only student_org can access; admin is redirected to /dashboard.
  */
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -18,6 +19,7 @@ import UserDashboard from "./pages/user/UserDashboard";
 import UserDocuments from "./pages/user/UserDocuments";
 import UserTrack from "./pages/user/UserTrack";
 import UserNotifications from "./pages/user/UserNotifications";
+import { AdminRoute, UserRoute, RequireAuth } from "./components/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -28,20 +30,22 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<AdminDashboard />} />
-          <Route path="/activity" element={<ActivityPage />} />
-          <Route path="/pending" element={<PendingPage />} />
-          <Route path="/new-document" element={<NewDocumentPage />} />
-          <Route path="/organizations" element={<OrganizationsPage />} />
-          <Route path="/organizations/:id" element={<OrganizationDetailPage />} />
-          <Route path="/documents/:id" element={<DocumentDetailPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
 
-          {/* User Routes */}
-          <Route path="/user/dashboard" element={<UserDashboard />} />
-          <Route path="/user/documents" element={<UserDocuments />} />
-          <Route path="/user/track" element={<UserTrack />} />
-          <Route path="/user/notifications" element={<UserNotifications />} />
+          {/* Admin-only routes: only admin can access */}
+          <Route path="/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/activity" element={<AdminRoute><ActivityPage /></AdminRoute>} />
+          <Route path="/pending" element={<AdminRoute><PendingPage /></AdminRoute>} />
+          <Route path="/new-document" element={<AdminRoute><NewDocumentPage /></AdminRoute>} />
+          <Route path="/organizations" element={<AdminRoute><OrganizationsPage /></AdminRoute>} />
+          <Route path="/organizations/:id" element={<AdminRoute><OrganizationDetailPage /></AdminRoute>} />
+          <Route path="/documents/:id" element={<RequireAuth><DocumentDetailPage /></RequireAuth>} />
+          <Route path="/profile" element={<AdminRoute><ProfilePage /></AdminRoute>} />
+
+          {/* User (student org) routes: only student_org can access */}
+          <Route path="/user/dashboard" element={<UserRoute><UserDashboard /></UserRoute>} />
+          <Route path="/user/documents" element={<UserRoute><UserDocuments /></UserRoute>} />
+          <Route path="/user/track" element={<UserRoute><UserTrack /></UserRoute>} />
+          <Route path="/user/notifications" element={<UserRoute><UserNotifications /></UserRoute>} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

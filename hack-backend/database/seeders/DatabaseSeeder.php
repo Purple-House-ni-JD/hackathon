@@ -2,24 +2,27 @@
 
 namespace Database\Seeders;
 
+use App\Models\Organization;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
+     * Creates a default admin and (optionally) a student org + user so you can log in.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            DocumentTypesSeeder::class,
+            OfficesSeeder::class,
+            OrganizationsSeeder::class,
+            UsersSeeder::class,
+            DocumentsSeeder::class,
+            DocumentStatusHistorySeeder::class,
+            NotificationsSeeder::class,
         ]);
     }
 }

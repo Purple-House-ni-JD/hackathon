@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('password_hash', 255);
             $table->string('full_name', 255);
             $table->string('user_type', 20);
-            $table->bigInteger('organization_id')->nullable();
+            $table->unsignedBigInteger('organization_id')->nullable();
             $table->boolean('is_active');
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
