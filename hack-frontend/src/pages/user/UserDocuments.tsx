@@ -1,43 +1,25 @@
 import React, { useState } from "react";
 import UserSidebar from "../../components/UserSidebar";
 import { Search, Filter, FileText, ChevronRight, Download } from "lucide-react";
+import { useDocuments } from "../../hooks/useDocuments"; // Import your hook
 
 const UserDocuments = () => {
-  // Mock Data
-  const documents = [
-    {
-      id: "DOC-001",
-      title: "Founders Day Budget",
-      type: "Budget Proposal",
-      date: "Jan 28, 2026",
-      status: "Under Review",
-      office: "Budget Office",
-    },
-    {
-      id: "DOC-002",
-      title: "General Assembly Design",
-      type: "Activity Design",
-      date: "Jan 25, 2026",
-      status: "Approved",
-      office: "OSA Director",
-    },
-    {
-      id: "DOC-003",
-      title: "T-Shirt Procurement",
-      type: "Purchase Request",
-      date: "Jan 20, 2026",
-      status: "Rejected",
-      office: "Supply Office",
-    },
-    {
-      id: "DOC-004",
-      title: "Venue Reservation",
-      type: "Letter",
-      date: "Jan 15, 2026",
-      status: "Approved",
-      office: "GSO",
-    },
-  ];
+  // 1. State for Search & Filter
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(
+    undefined,
+  );
+
+  // 2. Fetch Data using the Hook
+  // Pass current filters to the hook (assuming your API supports ?search= & ?status=)
+  const { data: docsData, isLoading } = useDocuments({
+    search: searchTerm,
+    status: statusFilter,
+  });
+
+  // 3. Normalize Data
+  // Handle case where API returns array directly OR paginated object { data: [...] }
+  const documents = Array.isArray(docsData) ? docsData : docsData?.data || [];
 
   return (
     <div className="flex h-screen bg-ustp-navy text-white overflow-hidden font-sans">
@@ -68,65 +50,99 @@ const UserDocuments = () => {
             <input
               type="text"
               placeholder="Search by title or tracking number..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)} // Wire up search
               className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-ustp-navy transition"
             />
           </div>
-          <button className="flex items-center gap-2 px-5 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-600">
+
+          {/* Simple Toggle Filter for Demo (Cycle: All -> Approved -> Pending) */}
+          <button
+            onClick={() => {
+              if (!statusFilter) setStatusFilter("Approved");
+              else if (statusFilter === "Approved")
+                setStatusFilter("Under Review");
+              else setStatusFilter(undefined);
+            }}
+            className={`flex items-center gap-2 px-5 py-3 border rounded-xl transition ${statusFilter ? "bg-ustp-navy text-white border-ustp-navy" : "border-gray-200 hover:bg-gray-50 text-gray-600"}`}
+          >
             <Filter size={18} />
-            <span>Filter</span>
+            <span>{statusFilter || "Filter"}</span>
           </button>
         </div>
 
         {/* Documents Table */}
         <div className="flex-1 overflow-y-auto scrollbar-hide">
-          <div className="space-y-3">
-            {documents.map((doc) => (
-              <div
-                key={doc.id}
-                className="flex items-center justify-between p-5 bg-white border border-gray-100 rounded-2xl hover:shadow-md hover:border-ustp-navy/20 transition-all group cursor-pointer"
-              >
-                <div className="flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 text-ustp-navy flex items-center justify-center">
-                    <FileText size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-800 text-lg group-hover:text-ustp-navy transition-colors">
-                      {doc.title}
-                    </h3>
-                    <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
-                      <span className="bg-gray-100 px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wide">
-                        {doc.id}
-                      </span>
-                      <span>•</span>
-                      <span>{doc.type}</span>
-                      <span>•</span>
-                      <span>{doc.date}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-8">
-                  <div className="text-right">
-                    <span
-                      className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-1 ${
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+              <p>Loading documents...</p>
+            </div>
+          ) : documents.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-gray-200 rounded-2xl">
+              <p className="text-gray-400 font-medium">No documents found.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {documents.map((doc: any) => (
+                <div
+                  key={doc.id}
+                  className="flex items-center justify-between p-5 bg-white border border-gray-100 rounded-2xl hover:shadow-md hover:border-ustp-navy/20 transition-all group cursor-pointer"
+                >
+                  <div className="flex items-center gap-5">
+                    <div
+                      className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                         doc.status === "Approved"
-                          ? "bg-green-100 text-green-700"
+                          ? "bg-green-50 text-green-600"
                           : doc.status === "Rejected"
-                            ? "bg-red-100 text-red-700"
-                            : "bg-amber-100 text-amber-700"
+                            ? "bg-red-50 text-red-600"
+                            : "bg-blue-50 text-ustp-navy"
                       }`}
                     >
-                      {doc.status}
-                    </span>
-                    <p className="text-xs text-gray-400 font-medium">
-                      At: {doc.office}
-                    </p>
+                      <FileText size={24} />
+                    </div>
+                    <div>
+                      {/* Map fields to your API response structure */}
+                      <h3 className="font-bold text-gray-800 text-lg group-hover:text-ustp-navy transition-colors">
+                        {doc.event_name || doc.title || "Untitled Document"}
+                      </h3>
+                      <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+                        <span className="bg-gray-100 px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wide">
+                          DOC-{doc.id}
+                        </span>
+                        <span>•</span>
+                        <span>{doc.type}</span>
+                        <span>•</span>
+                        <span>
+                          {new Date(doc.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <ChevronRight className="text-gray-300 group-hover:text-ustp-navy" />
+
+                  <div className="flex items-center gap-8">
+                    <div className="text-right">
+                      <span
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-1 ${
+                          doc.status === "Approved"
+                            ? "bg-green-100 text-green-700"
+                            : doc.status === "Rejected" ||
+                                doc.status === "Returned"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {doc.status}
+                      </span>
+                      <p className="text-xs text-gray-400 font-medium">
+                        At: {doc.current_office || "OSA Desk"}
+                      </p>
+                    </div>
+                    <ChevronRight className="text-gray-300 group-hover:text-ustp-navy" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>

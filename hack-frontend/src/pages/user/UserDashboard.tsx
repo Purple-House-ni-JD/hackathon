@@ -53,9 +53,9 @@ const UserDashboard = () => {
   const userProfile = {
     email: currentUser?.email || "loading...",
     role: "Student Organization",
-    department: currentUser?.organization?.department || "Student Affairs",
+    department:
+      currentUser?.organization?.abbreviation || "Recognized Student Org",
     avatarUrl:
-      currentUser?.avatar ||
       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&q=80",
     name: currentUser?.full_name || "Student Leader", // Using 'full_name' from your User Model
     organization: currentUser?.organization?.name || "Organization",

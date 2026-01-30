@@ -1,6 +1,6 @@
 /**
  * Type Definitions for VISTA Application
- * 
+ *
  * Defines all TypeScript interfaces and types that match the Laravel backend models
  * and API response structures. These types ensure type safety across the application
  * and provide IDE autocompletion for better developer experience.
@@ -12,8 +12,9 @@ export interface User {
   id: number;
   email: string;
   full_name: string;
-  user_type: 'admin' | 'student_org';
+  user_type: "admin" | "student_org";
   organization_id: number | null;
+  organization?: Organization; // <--- Fixes .organization error
   is_active: boolean;
   last_login: string | null;
   created_at: string;
@@ -35,7 +36,7 @@ export interface RegisterUserData {
   email: string;
   password: string;
   full_name: string;
-  user_type: 'admin' | 'student_org';
+  user_type: "admin" | "student_org";
   organization_id?: number;
   is_active?: boolean;
 }
@@ -108,7 +109,12 @@ export interface UpdateDocumentTypeData extends CreateDocumentTypeData {}
 
 // ==================== DOCUMENT ====================
 
-export type DocumentStatus = 'Received' | 'Under Review' | 'Forwarded' | 'Approved' | 'Rejected';
+export type DocumentStatus =
+  | "Received"
+  | "Under Review"
+  | "Forwarded"
+  | "Approved"
+  | "Rejected";
 
 export interface Document {
   id: number;
@@ -209,14 +215,17 @@ export interface PaginatedResponse<T> {
 // ==================== API QUERY PARAMETERS ====================
 
 export interface DocumentQueryParams {
-  status?: DocumentStatus;
+  // These are the keys your hook uses:
+  status?: string | DocumentStatus;
+  search?: string;
+
   organization_id?: number;
   document_type_id?: number;
-  search?: string;
   sort_by?: string;
-  sort_order?: 'asc' | 'desc';
+  sort_order?: "asc" | "desc";
   per_page?: number;
   page?: number;
+  limit?: number; // Added for 'Recent Docs' slice
 }
 
 export interface OrganizationQueryParams {
