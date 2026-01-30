@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('status', 20);
             $table->text('error_message')->nullable();
             $table->timestamp('created_at');
+            $table->timestamp('updated_at')->nullable();
             
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->foreign('status_history_id')->references('id')->on('document_status_history')->onDelete('cascade');

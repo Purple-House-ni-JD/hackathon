@@ -14,6 +14,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('requires_approval');
             $table->boolean('is_active');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
