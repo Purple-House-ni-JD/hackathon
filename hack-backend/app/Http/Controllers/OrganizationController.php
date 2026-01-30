@@ -11,10 +11,11 @@
  * - Create: Validates unique name, required fields via StoreOrganizationRequest
  * - Read: Lists active organizations with optional search, individual retrieval by ID
  * - Update: Validates unique name (excluding self), required fields via UpdateOrganizationRequest
- * - Delete: Cascades to related offices and sets organization_id to null on users/documents
+ * - Delete: Sets organization_id to null on users/documents
  * 
  * Assumes admin authorization is handled via middleware at the route level.
  */
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrganizationRequest;
@@ -33,7 +34,7 @@ class OrganizationController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('abbreviation', 'like', "%{$search}%");
+                    ->orWhere('abbreviation', 'like', "%{$search}%");
             });
         }
 

@@ -129,7 +129,7 @@ const ActivityPage = () => {
                           </h4>
                           <p className="text-xs text-gray-400 font-medium flex items-center gap-1">
                             <span className="w-1 h-1 rounded-full bg-gray-300"></span>
-                            {getActionText(doc.status)} by {doc.organization?.name || 'Unknown'} - Status: {doc.status}
+                            {getActionText(doc.status)} by {doc.current_office?.name || 'Unknown'} - Status: {doc.status}
                           </p>
                         </div>
                       </div>

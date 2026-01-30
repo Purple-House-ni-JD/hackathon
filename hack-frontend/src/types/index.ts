@@ -1,9 +1,9 @@
 /**
  * Type Definitions for VISTA Application
- * 
- * Defines all TypeScript interfaces and types that match the Laravel backend models
- * and API response structures. These types ensure type safety across the application
- * and provide IDE autocompletion for better developer experience.
+ *
+ * Matches Laravel backend models and API responses. Document includes both camelCase
+ * and snake_case relationship fields (e.g. current_office, currentOffice) for API
+ * compatibility. CRUD types (Create/Update) align with backend request validation.
  */
 
 // ==================== USER & AUTH ====================
@@ -121,11 +121,14 @@ export interface Document {
   submitted_by: number | null;
   created_at: string;
   updated_at: string;
-  // Relationships
+  // Relationships (API returns snake_case; camelCase kept for compatibility)
   organization?: Organization;
   documentType?: DocumentType;
+  document_type?: DocumentType;
   currentOffice?: Office;
+  current_office?: Office;
   submittedBy?: User;
+  submitted_by?: User;
   statusHistory?: DocumentStatusHistory[];
 }
 

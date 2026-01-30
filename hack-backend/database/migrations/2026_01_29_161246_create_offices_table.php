@@ -16,8 +16,6 @@ return new class extends Migration
             $table->boolean('is_active');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
-
-            $table->foreignId('organization_id')->constrained('organizations')->onDelete('cascade');
         });
     }
 
