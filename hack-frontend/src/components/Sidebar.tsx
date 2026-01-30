@@ -1,3 +1,16 @@
+/**
+ * Sidebar Navigation Component - Integrated with Backend API
+ * 
+ * Provides app navigation with authentication integration:
+ * - useCurrentUser: Displays authenticated user information
+ * - useLogout: Handles user logout with token cleanup
+ * - Responsive mobile menu with overlay
+ * - Active tab highlighting
+ * 
+ * The logout action clears React Query cache and localStorage,
+ * then redirects to the login page via the useLogout mutation hook.
+ */
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,9 +22,10 @@ import {
   User,
   Menu,
   X,
-  LogOut, // <--- 1. Import the icon
+  LogOut,
 } from "lucide-react";
 import AdminProfile from "./AdminProfile";
+import { useCurrentUser, useLogout } from "../hooks/useAuth";
 
 interface SidebarProps {
   activeTab: string;
@@ -21,10 +35,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
+  const { data: currentUser } = useCurrentUser();
+  const logoutMutation = useLogout();
+
   const adminData = {
-    email: "osa.admin@ustp.edu.ph",
-    role: "Super Admin",
-    department: "Student Affairs",
+    email: currentUser?.email || "Loading...",
+    role: currentUser?.user_type === 'admin' ? "Super Admin" : "Student Org",
+    department: currentUser?.organization_id ? "Student Organization" : "Student Affairs",
     avatarUrl:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&q=80",
   };
@@ -68,16 +85,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
     },
   ];
 
-  // 2. Handle Logout Logic
   const handleLogout = () => {
-    // Add any cleanup logic here (e.g., localStorage.clear())
+    logoutMutation.mutate();
     setIsSidebarOpen(false);
-    navigate("/"); // Redirect to Login
   };
 
   return (
     <>
-      {/* MOBILE HEADER */}
       <div className="lg:hidden fixed top-0 left-0 right-0 bg-ustp-navy/80 backdrop-blur-xl border-b border-white/5 h-16 px-4 flex items-center justify-between z-50">
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -93,7 +107,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
         <div className="w-10"></div>
       </div>
 
-      {/* LEFT NAVIGATION */}
       <aside
         className={`
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
@@ -107,7 +120,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
         </h2>
 
         <nav className="flex flex-col space-y-6 flex-1">
-          {/* Main Navigation Items */}
           {navItems.map((item) => (
             <NavItem
               key={item.id}
@@ -121,25 +133,22 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
             />
           ))}
 
-          {/* 3. Logout Button (Added with separator) */}
           <div className="pt-6 mt-6 border-t border-white/10">
             <NavItem
               icon={<LogOut size={20} />}
-              label="Logout"
+              label={logoutMutation.isPending ? "Logging out..." : "Logout"}
               onClick={handleLogout}
-              // Add specific color for logout hover if desired
               className="hover:text-red-400"
+              disabled={logoutMutation.isPending}
             />
           </div>
         </nav>
 
-        {/* MOBILE PROFILE */}
         <div className="lg:hidden mt-auto border-t border-white/10 pt-8">
           <AdminProfile {...adminData} variant="dark" />
         </div>
       </aside>
 
-      {/* OVERLAY for mobile sidebar */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
@@ -150,27 +159,28 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
   );
 };
 
-// --- Helper Components ---
 const NavItem = ({
   icon,
   label,
   active = false,
   onClick,
-  className = "", // Added className prop for extra customization
+  className = "",
+  disabled = false,
 }: {
   icon: React.ReactNode;
   label: string;
   active?: boolean;
   onClick?: () => void;
   className?: string;
+  disabled?: boolean;
 }) => (
   <div
-    onClick={onClick}
+    onClick={disabled ? undefined : onClick}
     className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${
       active
         ? "opacity-100 translate-x-2"
         : "opacity-60 hover:opacity-100 hover:translate-x-1"
-    } ${className}`}
+    } ${className} ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
   >
     <div
       className={`${
