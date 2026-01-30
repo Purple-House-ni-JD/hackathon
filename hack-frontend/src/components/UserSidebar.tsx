@@ -10,6 +10,7 @@ import {
   LogOut,
   Bell,
 } from "lucide-react";
+import { useLogout } from "../hooks/useAuth";
 import AdminProfile from "./AdminProfile"; // We can reuse this or rename to UserProfile later
 
 interface SidebarProps {
@@ -19,6 +20,13 @@ interface SidebarProps {
 const UserSidebar: React.FC<SidebarProps> = ({ activeTab }) => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+
+  const logoutMutation = useLogout();
+
+  const handleLogout = () => {
+        logoutMutation.mutate();
+        setIsSidebarOpen(false);
+  };
 
   // Hardcoded Student Data for Demo
   const studentData = {
@@ -61,10 +69,6 @@ const UserSidebar: React.FC<SidebarProps> = ({ activeTab }) => {
       id: "profile",
     },
   ];
-
-  const handleLogout = () => {
-    navigate("/");
-  };
 
   return (
     <>

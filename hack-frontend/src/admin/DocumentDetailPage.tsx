@@ -56,6 +56,7 @@ const DocumentDetailPage = () => {
       ? officeOverride
       : (document?.current_office_id ?? "");
 
+  const isStudentOrg = currentUser?.user_type === "student_org";
   const adminData = useMemo(
     () => ({
       email: currentUser?.email ?? "Loading...",
@@ -138,10 +139,10 @@ const DocumentDetailPage = () => {
         <div className="flex-1 lg:px-4 pt-20 lg:pt-4 overflow-y-auto scrollbar-hide">
           <button
             type="button"
-            onClick={() => navigate("/pending")}
+            onClick={() => navigate(isStudentOrg ? "/user/documents" : "/pending")}
             className="flex items-center gap-2 text-gray-500 hover:text-ustp-navy font-medium mb-6"
           >
-            <ArrowLeft size={18} /> Back to Pending
+            <ArrowLeft size={18} /> {isStudentOrg ? "Back to My Documents" : "Back to Pending"}
           </button>
 
           <div className="mb-8">
@@ -186,6 +187,7 @@ const DocumentDetailPage = () => {
               </dl>
             </div>
 
+            {!isStudentOrg && (
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
               <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Update status</h2>
               {updateStatus.isError && (
@@ -261,6 +263,7 @@ const DocumentDetailPage = () => {
                 </div>
               </form>
             </div>
+            )}
           </div>
         </div>
 

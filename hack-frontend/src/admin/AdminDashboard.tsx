@@ -23,27 +23,19 @@ import {
 
 import AdminProfile from "../components/AdminProfile";
 import Sidebar from "../components/Sidebar";
-import { useDocuments } from "../hooks/useDocuments";
-import { useOrganizations } from "../hooks/useOrganizations";
-import { useOffices } from "../hooks/useMetadata";
+import { useDashboardStats } from "../hooks/useDashboardStats";
 import { useCurrentUser } from "../hooks/useAuth";
 
 const AdminDashboard = () => {
   const { data: currentUser } = useCurrentUser();
+  const { data: stats } = useDashboardStats();
 
-  const { data: allDocuments } = useDocuments({});
-  const { data: pendingDocs } = useDocuments({ status: ["Received", "Under Review"] });
-  const { data: rejectedDocs } = useDocuments({ status: "Rejected" });
-  const { data: approvedDocs } = useDocuments({ status: "Approved" });
-  const { data: organizations } = useOrganizations();
-  const { data: offices } = useOffices();
-
-  const totalDocuments = allDocuments?.total || 0;
-  const pendingCount = pendingDocs?.total || 0;
-  const rejectedCount = rejectedDocs?.total || 0;
-  const approvedCount = approvedDocs?.total || 0;
-  const activeOrgs = organizations?.length || 0;
-  const activeOffices = offices?.length || 0;
+  const totalDocuments = stats?.total_documents ?? 0;
+  const pendingCount = stats?.pending_approvals ?? 0;
+  const rejectedCount = stats?.rejected_documents ?? 0;
+  const approvedCount = stats?.approved_documents ?? 0;
+  const activeOrgs = stats?.active_organizations ?? 0;
+  const activeOffices = stats?.offices_involved ?? 0;
 
   const adminData = {
     email: currentUser?.email || "Loading...",

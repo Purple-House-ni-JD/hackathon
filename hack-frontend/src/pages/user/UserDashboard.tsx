@@ -10,44 +10,25 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-// IMPORTANT: Import the hooks you just shared
 import { useCurrentUser } from "../../hooks/useAuth";
+import { useDashboardStats } from "../../hooks/useDashboardStats";
 import { useDocuments } from "../../hooks/useDocuments";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
 
-  // 1. Fetch User Data
   const { data: currentUser, isLoading: userLoading } = useCurrentUser();
+  const { data: stats } = useDashboardStats();
+  const { data: recentDocsData, isLoading: docsLoading } = useDocuments({
+    per_page: 10,
+    sort_by: "updated_at",
+    sort_order: "desc",
+  });
 
-  // 2. Fetch Stats using useDocuments with filters
-  // Note: React Query executes these in parallel
-  const { data: pendingDocs } = useDocuments({ status: "Under Review" });
-  const { data: approvedDocs } = useDocuments({ status: "Approved" });
-  const { data: rejectedDocs } = useDocuments({ status: "Rejected" }); // Adjust string to match your DB exactly
-
-  // 3. Fetch Recent Docs (We fetch 'All' and just take the top 5)
-  // You might want to add a 'limit: 5' to your API params later
-  const { data: recentDocsData, isLoading: docsLoading } = useDocuments({});
-
-  // Helper to safely get counts (Handles if API returns { data: [], total: 10 } or just [])
-  const getCount = (data: any) => {
-    if (!data) return 0;
-    return data.total !== undefined ? data.total : data.length || 0;
-  };
-
-  const getRecentList = (data: any) => {
-    if (!data) return [];
-    // If API returns wrapped data { data: [...] }, use that. Otherwise use data directly.
-    const list = Array.isArray(data) ? data : data.data || [];
-    return list.slice(0, 5); // Take top 5
-  };
-
-  // Prepare Data for Render
-  const pendingCount = getCount(pendingDocs);
-  const approvedCount = getCount(approvedDocs);
-  const rejectedCount = getCount(rejectedDocs);
-  const recentList = getRecentList(recentDocsData);
+  const pendingCount = stats?.pending_approvals ?? 0;
+  const approvedCount = stats?.approved_documents ?? 0;
+  const rejectedCount = stats?.rejected_documents ?? 0;
+  const recentList = (recentDocsData?.data ?? []).slice(0, 5);
 
   // Profile Object
   const userProfile = {
@@ -141,12 +122,9 @@ const UserDashboard = () => {
               ) : recentList.length === 0 ? (
                 <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-xl">
                   <p className="text-gray-400">No documents submitted yet.</p>
-                  <button
-                    onClick={() => navigate("/user/new-document")}
-                    className="text-ustp-navy font-bold text-sm mt-2 hover:underline"
-                  >
-                    Submit one now
-                  </button>
+                  <p className="text-ustp-navy font-bold text-sm mt-2">
+                    Documents are logged by OSA staff.
+                  </p>
                 </div>
               ) : (
                 recentList.map((doc: any) => (
@@ -172,9 +150,9 @@ const UserDashboard = () => {
                           {doc.event_name || doc.title || "Untitled Document"}
                         </h4>
                         <p className="text-sm text-gray-400 font-medium">
-                          {doc.type} •{" "}
+                          {(doc.document_type ?? doc.documentType)?.name ?? "Document"} •{" "}
                           <span className="text-gray-500">
-                            {doc.current_office || "OSA Desk"}
+                            {(doc.current_office ?? doc.currentOffice)?.name ?? "OSA Desk"}
                           </span>
                         </p>
                       </div>

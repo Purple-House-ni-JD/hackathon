@@ -24,9 +24,10 @@ A web application for tracking document approvals and visibility across organiza
 
 ### Prerequisites
 
-- **PHP** 8.2+ (with extensions: mbstring, xml, ctype, json, bcmath, pdo_sqlite)  
+- **PHP** 8.2+ (with extensions: mbstring, xml, ctype, json, bcmath, **pdo_mysql**)  
 - **Composer**  
 - **Node.js** 18+ and **npm**  
+- **MySQL** (or MariaDB) for the backend database  
 
 ### Backend (Laravel)
 
@@ -46,22 +47,43 @@ A web application for tracking document approvals and visibility across organiza
    php artisan key:generate
    ```
 
-4. Create the SQLite database file (if it doesn’t exist):
-   ```bash
-   type nul > database\database.sqlite
+4. Configure the database: the app uses **MySQL** by default. In `.env` set:
    ```
-   Or on macOS/Linux: `touch database/database.sqlite`
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=vista
+   DB_USERNAME=root
+   DB_PASSWORD=your_password
+   ```
+   Create the database in MySQL (e.g. `CREATE DATABASE vista;`).
 
 5. Run migrations:
    ```bash
    php artisan migrate
    ```
 
-6. Start the Laravel server:
+6. (Optional) Seed default users so you can log in:
+   ```bash
+   php artisan db:seed
+   ```
+   This creates:
+   - **Admin:** `admin@example.com` / `password` → redirects to admin dashboard.
+   - **Student org:** `org@example.com` / `password` → redirects to user dashboard.
+
+7. Start the Laravel server:
    ```bash
    php artisan serve
    ```
    The API will be available at **http://localhost:8000**.
+
+### How to log in
+
+1. Open the frontend (e.g. **http://localhost:5173**). You’ll see the **Admin Login** page.
+2. After running `php artisan db:seed`, you can use:
+   - **Admin (OSA):** email `admin@example.com`, password `password` → you’ll be sent to the admin dashboard.
+   - **Student organization:** email `org@example.com`, password `password` → you’ll be sent to the user (org) dashboard.
+3. If you haven’t seeded, create users in the database (e.g. via **Tinker**: `php artisan tinker` then `User::create([...])`) or add a registration flow. Only an existing admin can create more users via the app (register endpoint).
 
 ### Frontend (React)
 

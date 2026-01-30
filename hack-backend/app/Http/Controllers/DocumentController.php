@@ -61,13 +61,21 @@ class DocumentController extends Controller
         }
 
         if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('event_name', 'like', "%{$search}%")
-                    ->orWhereHas('organization', function ($q) use ($search) {
-                        $q->where('name', 'like', "%{$search}%");
-                    });
-            });
+            $search = trim($request->search);
+            if ($search !== '') {
+                $query->where(function ($q) use ($search) {
+                    $q->where('event_name', 'like', "%{$search}%")
+                        ->orWhereHas('organization', function ($q) use ($search) {
+                            $q->where('name', 'like', "%{$search}%");
+                        });
+                    if (is_numeric($search)) {
+                        $q->orWhere('id', (int) $search);
+                    }
+                    if (preg_match('/^DOC-(\d+)$/i', $search, $m)) {
+                        $q->orWhere('id', (int) $m[1]);
+                    }
+                });
+            }
         }
 
         $sortBy = $request->get('sort_by', 'updated_at');
