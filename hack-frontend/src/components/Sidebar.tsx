@@ -94,9 +94,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
           overflow-y-auto scrollbar-hide
         `}
             >
-                <h2 className="text-xl font-medium text-gray-400 uppercase tracking-widest pl-2">
-                    Dashboard
-                </h2>
+                <div className="flex items-center gap-3 pl-2 group cursor-pointer" onClick={() => navigate("/dashboard")}>
+                    <div className="w-10 h-10 transition-transform duration-300 group-hover:scale-110">
+                        <img src="/vistalogo.png" alt="VISTA" className="w-full h-full object-contain" />
+                    </div>
+                    <span className="text-2xl font-black tracking-tighter text-white">VISTA</span>
+                </div>
                 <nav className="flex flex-col space-y-6 flex-1">
                     {navItems.map((item) => (
                         <NavItem
