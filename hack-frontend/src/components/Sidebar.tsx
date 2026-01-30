@@ -101,43 +101,32 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
           fixed lg:relative inset-y-0 left-0 bg-ustp-navy z-40 transition-transform duration-300 ease-in-out
           overflow-y-auto scrollbar-hide
         `}
-      >
-        <h2 className="text-xl font-medium text-gray-400 uppercase tracking-widest pl-2">
-          Dashboard
-        </h2>
-
-        <nav className="flex flex-col space-y-6 flex-1">
-          {/* Main Navigation Items */}
-          {navItems.map((item) => (
-            <NavItem
-              key={item.id}
-              icon={item.icon}
-              label={item.label}
-              active={activeTab === item.id}
-              onClick={() => {
-                setIsSidebarOpen(false);
-                navigate(item.path);
-              }}
-            />
-          ))}
-
-          {/* 3. Logout Button (Added with separator) */}
-          <div className="pt-6 mt-6 border-t border-white/10">
-            <NavItem
-              icon={<LogOut size={20} />}
-              label="Logout"
-              onClick={handleLogout}
-              // Add specific color for logout hover if desired
-              className="hover:text-red-400"
-            />
-          </div>
-        </nav>
-
-        {/* MOBILE PROFILE */}
-        <div className="lg:hidden mt-auto border-t border-white/10 pt-8">
-          <AdminProfile {...adminData} variant="dark" />
-        </div>
-      </aside>
+            >
+                <div className="flex items-center gap-3 pl-2 group cursor-pointer" onClick={() => navigate("/dashboard")}>
+                    <div className="w-10 h-10 transition-transform duration-300 group-hover:scale-110">
+                        <img src="/vistalogo.png" alt="VISTA" className="w-full h-full object-contain" />
+                    </div>
+                    <span className="text-2xl font-black tracking-tighter text-white">VISTA</span>
+                </div>
+                <nav className="flex flex-col space-y-6 flex-1">
+                    {navItems.map((item) => (
+                        <NavItem
+                            key={item.id}
+                            icon={item.icon}
+                            label={item.label}
+                            active={activeTab === item.id}
+                            onClick={() => {
+                                setIsSidebarOpen(false);
+                                navigate(item.path);
+                            }}
+                        />
+                    ))}
+                </nav>
+                {/* MOBILE PROFILE */}
+                <div className="lg:hidden mt-auto border-t border-white/10 pt-8">
+                    <AdminProfile {...adminData} variant="dark" />
+                </div>
+            </aside>
 
       {/* OVERLAY for mobile sidebar */}
       {isSidebarOpen && (
