@@ -92,9 +92,10 @@ const UserSidebar: React.FC<SidebarProps> = ({ activeTab }) => {
           overflow-y-auto scrollbar-hide
         `}
       >
-        <h2 className="text-xl font-medium text-gray-400 uppercase tracking-widest pl-2">
-          Student Portal
-        </h2>
+        <div className="flex items-center gap-3 pl-2">
+          <img src="/VISTA.png" alt="VISTA Logo" className="w-8 h-8 object-contain" />
+          <span className="text-2xl font-bold tracking-tight text-white">VISTA</span>
+        </div>
 
         <nav className="flex flex-col space-y-6 flex-1">
           {navItems.map((item) => (
@@ -104,11 +105,10 @@ const UserSidebar: React.FC<SidebarProps> = ({ activeTab }) => {
                 setIsSidebarOpen(false);
                 navigate(item.path);
               }}
-              className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${
-                activeTab === item.id
+              className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${activeTab === item.id
                   ? "opacity-100 translate-x-2"
                   : "opacity-60 hover:opacity-100 hover:translate-x-1"
-              }`}
+                }`}
             >
               <div
                 className={`${activeTab === item.id ? "text-ustp-gold" : "text-white group-hover:text-ustp-gold"}`}
