@@ -8,13 +8,14 @@
  * - store/update/destroy: Admin-only operations for managing offices
  * 
  * CRUD Operations:
- * - Create: Validates organization reference, required fields via StoreOfficeRequest
- * - Read: Lists active offices with optional organization/search filters, individual retrieval by ID
- * - Update: Validates organization reference, required fields via UpdateOfficeRequest
+ * - Create: Validates required fields via StoreOfficeRequest
+ * - Read: Lists active offices with optional search filters, individual retrieval by ID
+ * - Update: Validates required fields via UpdateOfficeRequest
  * - Delete: Sets current_office_id to null on documents, cascades history via foreign key
  * 
  * Assumes admin authorization is handled via middleware at the route level.
  */
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOfficeRequest;
@@ -29,15 +30,11 @@ class OfficeController extends Controller
     {
         $query = Office::where('is_active', true);
 
-        if ($request->has('organization_id')) {
-            $query->where('organization_id', $request->organization_id);
-        }
-
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('abbreviation', 'like', "%{$search}%");
+                    ->orWhere('abbreviation', 'like', "%{$search}%");
             });
         }
 
@@ -64,7 +61,6 @@ class OfficeController extends Controller
             'abbreviation' => $request->abbreviation,
             'email' => $request->email,
             'is_active' => $request->is_active,
-            'organization_id' => $request->organization_id,
         ]);
 
         return response()->json($office, 201);
@@ -83,7 +79,6 @@ class OfficeController extends Controller
             'abbreviation' => $request->abbreviation,
             'email' => $request->email,
             'is_active' => $request->is_active,
-            'organization_id' => $request->organization_id,
         ]);
 
         return response()->json($office);

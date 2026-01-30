@@ -3,9 +3,10 @@
 /**
  * Office Model
  * 
- * Represents offices within organizations that handle document processing.
+ * Represents offices that handle document processing.
  * Documents are routed through offices, and status history tracks office transfers.
  */
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -52,4 +53,3 @@ class Office extends Model
         return $this->hasMany(DocumentStatusHistory::class, 'new_office_id');
     }
 }
-

@@ -43,9 +43,5 @@ class Organization extends Model
         return $this->hasMany(Document::class, 'organization_id');
     }
 
-    public function offices()
-    {
-        return $this->hasMany(Office::class, 'organization_id');
-    }
 }
 

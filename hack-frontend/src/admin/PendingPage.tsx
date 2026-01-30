@@ -1,17 +1,14 @@
 /**
  * Pending Page - Integrated with Backend API
- * 
- * Displays documents requiring action using React Query:
- * - useDocuments: Fetches paginated documents with 'Under Review' and 'Forwarded' status
- * - Supports search, filtering, and pagination from backend
- * - Loading states show skeleton placeholders
- * - Empty states inform user when no pending documents exist
- * 
- * Query parameters are dynamically updated based on user interaction
- * (search, page changes), triggering automatic refetches via React Query.
+ *
+ * Lists documents with search, status filter, and pagination. Supports Create/Update
+ * flow: list is fetched via useDocuments (no fixed status; optional status filter).
+ * Assigned office is read from API snake_case (current_office) or camelCase (currentOffice).
+ * Row actions navigate to document detail/update page. Mutations invalidate documents query.
  */
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search, Filter, MoreVertical } from "lucide-react";
 import AdminProfile from "../components/AdminProfile";
 import Sidebar from "../components/Sidebar";
@@ -20,21 +17,59 @@ import { useCurrentUser } from "../hooks/useAuth";
 import { type DocumentStatus } from "../types";
 import { format } from "date-fns";
 
+const STATUS_OPTIONS: { value: DocumentStatus | ""; label: string }[] = [
+  { value: "", label: "All statuses" },
+  { value: "Received", label: "Received" },
+  { value: "Under Review", label: "Under Review" },
+  { value: "Forwarded", label: "Forwarded" },
+  { value: "Approved", label: "Approved" },
+  { value: "Rejected", label: "Rejected" },
+];
+
 const PendingPage = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<DocumentStatus | "">("");
   const itemsPerPage = 10;
 
   const { data: currentUser } = useCurrentUser();
-  
-  const { data: documentsData, isLoading, isError } = useDocuments({
-    status: 'Under Review',
-    search: searchQuery || undefined,
+
+  const queryParams = useMemo(() => ({
     per_page: itemsPerPage,
     page: currentPage,
     sort_by: 'updated_at',
-    sort_order: 'desc',
-  });
+    sort_order: 'desc' as const,
+  }), [currentPage]);
+
+  const { data: documentsData, isLoading, isError } = useDocuments(queryParams);
+
+  const filteredDocuments = useMemo(() => {
+    const list = (documentsData?.data ?? []) as any[];
+
+    const byStatus = statusFilter
+      ? list.filter((d) => d.status === statusFilter)
+      : list;
+
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return byStatus;
+
+    return byStatus.filter((d) => {
+      const event = (d.event_name || '').toString().toLowerCase();
+      const org = (d.organization?.name || '').toString().toLowerCase();
+      const office = ((d.current_office ?? d.currentOffice)?.name || '').toString().toLowerCase();
+      const submitter = ((d.submitted_by ?? d.submittedBy)?.full_name || '').toString().toLowerCase();
+      const idStr = (d.id || '').toString();
+
+      return (
+        event.includes(q) ||
+        org.includes(q) ||
+        office.includes(q) ||
+        submitter.includes(q) ||
+        idStr.includes(q)
+      );
+    });
+  }, [documentsData, statusFilter, searchQuery]);
 
   const adminData = {
     email: currentUser?.email || "Loading...",
@@ -76,8 +111,8 @@ const PendingPage = () => {
               Pending Actions
             </h1>
 
-            <div className="flex items-center gap-2">
-              <div className="relative group">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="relative group flex-1 min-w-[180px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-ustp-navy transition-colors" size={18} />
                 <input
                   type="text"
@@ -87,12 +122,23 @@ const PendingPage = () => {
                     setSearchQuery(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-ustp-navy/20 focus:border-ustp-navy transition-all w-full md:w-64"
+                  className="pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-ustp-navy/20 focus:border-ustp-navy transition-all w-full"
                 />
               </div>
-              <button className="p-2 bg-gray-50 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors">
-                <Filter size={18} />
-              </button>
+              <select
+                value={statusFilter}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value as DocumentStatus | "");
+                  setCurrentPage(1);
+                }}
+                className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-ustp-navy/20 text-gray-700 min-w-[140px]"
+                aria-label="Filter by status"
+              >
+                {STATUS_OPTIONS.map((opt) => (
+                  <option key={opt.value || "all"} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+              <span className="sr-only" aria-hidden><Filter size={18} /></span>
             </div>
           </div>
 
@@ -109,7 +155,7 @@ const PendingPage = () => {
                 <p className="text-gray-500 font-medium">Loading pending documents...</p>
               </div>
             </div>
-          ) : !documentsData?.data || documentsData.data.length === 0 ? (
+          ) : (!filteredDocuments || filteredDocuments.length === 0) ? (
             <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
               <div className="p-12 text-center">
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -136,7 +182,7 @@ const PendingPage = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50 text-sm">
-                      {documentsData.data.map((doc) => (
+                      {filteredDocuments.map((doc) => (
                         <tr key={doc.id} className="hover:bg-gray-50/50 transition-colors group">
                           <td className="px-6 py-4">
                             <span className="font-bold text-ustp-navy block">{doc.event_name}</span>
@@ -153,20 +199,31 @@ const PendingPage = () => {
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
                               <div className="w-1.5 h-1.5 rounded-full bg-ustp-gold animate-pulse"></div>
-                              <span className="text-gray-600">{doc.currentOffice?.name || 'Unassigned'}</span>
+                              <span className="text-gray-600">{(doc.current_office ?? doc.currentOffice)?.name ?? 'Unassigned'}</span>
                             </div>
                           </td>
                           <td className="px-6 py-4 text-gray-500">{formatDate(doc.date_received)}</td>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
-                              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-500">
-                                {doc.submittedBy?.full_name?.split(' ').map(n => n[0]).join('') || '?'}
-                              </div>
-                              <span className="text-gray-600">{doc.submittedBy?.full_name || 'Unknown'}</span>
+                              {(() => {
+                                const user = doc.submitted_by ?? doc.submittedBy;
+                                const initials = user?.full_name?.split(' ').map(n => n[0]).join('') || '?';
+                                return (
+                                  <>
+                                    <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-500">{initials}</div>
+                                    <span className="text-gray-600">{user?.full_name ?? 'Unknown'}</span>
+                                  </>
+                                );
+                              })()}
                             </div>
                           </td>
                           <td className="px-6 py-4 text-right">
-                            <button className="p-1 text-gray-400 hover:text-ustp-navy transition-colors opacity-0 group-hover:opacity-100">
+                            <button
+                              type="button"
+                              onClick={() => navigate(`/documents/${doc.id}`)}
+                              className="p-1 text-gray-400 hover:text-ustp-navy transition-colors opacity-0 group-hover:opacity-100"
+                              aria-label="View or update document"
+                            >
                               <MoreVertical size={18} />
                             </button>
                           </td>
@@ -179,7 +236,7 @@ const PendingPage = () => {
 
               <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
                 <p className="text-xs text-gray-400 font-medium whitespace-nowrap">
-                  Showing {documentsData.from || 0} to {documentsData.to || 0} of {documentsData.total} pending approvals
+                  Showing {documentsData.from ?? 0} to {documentsData.to ?? 0} of {documentsData.total} documents
                 </p>
                 <div className="flex items-center gap-2">
                   <button
