@@ -172,11 +172,10 @@ const OrganizationsPage = () => {
                         <Building2 size={24} />
                       </div>
                       <span
-                        className={`px-3 py-1 rounded-full text-[10px] font-bold border ${
-                          org.is_active
+                        className={`px-3 py-1 rounded-full text-[10px] font-bold border ${org.is_active
                             ? "bg-green-50 text-green-600 border-green-100"
                             : "bg-amber-50 text-amber-600 border-amber-100"
-                        }`}
+                          }`}
                       >
                         {org.is_active ? "Active" : "Inactive"}
                       </span>
@@ -210,9 +209,8 @@ const OrganizationsPage = () => {
                       type="button"
                       onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                       disabled={currentPage === 1}
-                      className={`px-4 py-2 text-xs font-bold transition-all ${
-                        currentPage === 1 ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-ustp-navy"
-                      }`}
+                      className={`px-4 py-2 text-xs font-bold transition-all ${currentPage === 1 ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-ustp-navy"
+                        }`}
                     >
                       Previous
                     </button>
@@ -222,9 +220,8 @@ const OrganizationsPage = () => {
                           key={i + 1}
                           type="button"
                           onClick={() => setCurrentPage(i + 1)}
-                          className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                            currentPage === i + 1 ? "bg-ustp-navy text-white shadow-md" : "text-gray-400 hover:bg-gray-50"
-                          }`}
+                          className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${currentPage === i + 1 ? "bg-ustp-navy text-white shadow-md" : "text-gray-400 hover:bg-gray-50"
+                            }`}
                         >
                           {i + 1}
                         </button>
@@ -234,9 +231,8 @@ const OrganizationsPage = () => {
                       type="button"
                       onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                       disabled={currentPage === totalPages}
-                      className={`px-4 py-2 text-xs font-bold transition-all ${
-                        currentPage === totalPages ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-ustp-navy"
-                      }`}
+                      className={`px-4 py-2 text-xs font-bold transition-all ${currentPage === totalPages ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-ustp-navy"
+                        }`}
                     >
                       Next
                     </button>
@@ -249,6 +245,21 @@ const OrganizationsPage = () => {
 
         <div className="hidden lg:flex w-80 border-l border-gray-100 pl-8 pt-4 flex-col items-center">
           <AdminProfile {...adminData} variant="light" />
+          <div className="mt-auto flex flex-col items-center opacity-80 pb-4">
+            <div className="w-20 h-20 mb-2 transform hover:scale-110 transition-transform duration-300">
+              <img
+                src="/VISTA.png"
+                alt="VISTA"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <h2 className="text-2xl font-black text-ustp-navy tracking-tighter">
+              VISTA
+            </h2>
+            <p className="text-xs text-gray-400 font-medium">
+              Track Your Docs.
+            </p>
+          </div>
         </div>
       </main>
 
@@ -278,7 +289,7 @@ const OrganizationsPage = () => {
                 <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
                   {createMutation.error instanceof AxiosError
                     ? (createMutation.error.response?.data as { message?: string })?.message ??
-                      "Failed to create organization."
+                    "Failed to create organization."
                     : "An error occurred."}
                 </div>
               )}

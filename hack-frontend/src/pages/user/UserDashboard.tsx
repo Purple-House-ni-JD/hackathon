@@ -156,14 +156,13 @@ const UserDashboard = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                          doc.status === "Approved"
+                        className={`w-12 h-12 rounded-full flex items-center justify-center ${doc.status === "Approved"
                             ? "bg-green-100 text-green-700"
                             : doc.status === "Rejected" ||
-                                doc.status === "Returned"
+                              doc.status === "Returned"
                               ? "bg-red-100 text-red-700"
                               : "bg-amber-100 text-amber-700"
-                        }`}
+                          }`}
                       >
                         <FileText size={20} />
                       </div>
@@ -183,14 +182,13 @@ const UserDashboard = () => {
 
                     <div className="text-right">
                       <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-1 ${
-                          doc.status === "Approved"
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-1 ${doc.status === "Approved"
                             ? "bg-green-100 text-green-700"
                             : doc.status === "Rejected" ||
-                                doc.status === "Returned"
+                              doc.status === "Returned"
                               ? "bg-red-100 text-red-700"
                               : "bg-amber-100 text-amber-700"
-                        }`}
+                          }`}
                       >
                         {doc.status}
                       </span>
@@ -236,7 +234,7 @@ const UserDashboard = () => {
           <div className="mt-auto flex flex-col items-center opacity-80 pb-4">
             <div className="w-20 h-20 mb-2 transform hover:scale-110 transition-transform duration-300">
               <img
-                src="/vistalogo.png"
+                src="/VISTA.png"
                 alt="VISTA"
                 className="w-full h-full object-contain"
               />

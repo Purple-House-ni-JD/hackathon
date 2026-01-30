@@ -169,7 +169,7 @@ const ActivityPage = () => {
           <AdminProfile {...adminData} variant="light" />
 
           <div className="mt-auto flex flex-col items-center opacity-80 pb-4">
-            <div className="w-20 h-20 mb-2">
+            <div className="w-20 h-20 mb-2 transform hover:scale-110 transition-transform duration-300">
               <img
                 src="/VISTA.png"
                 alt="VISTA"

@@ -170,12 +170,12 @@ const DocumentDetailPage = () => {
                   <dd className="text-gray-800">
                     {document.date_received
                       ? (() => {
-                          try {
-                            return format(new Date(document.date_received), "MMM dd, yyyy");
-                          } catch {
-                            return document.date_received;
-                          }
-                        })()
+                        try {
+                          return format(new Date(document.date_received), "MMM dd, yyyy");
+                        } catch {
+                          return document.date_received;
+                        }
+                      })()
                       : "—"}
                   </dd>
                 </div>
@@ -266,6 +266,21 @@ const DocumentDetailPage = () => {
 
         <div className="hidden lg:flex w-80 border-l border-gray-100 pl-8 pt-4 flex-col items-center">
           <AdminProfile {...adminData} variant="light" />
+          <div className="mt-auto flex flex-col items-center opacity-80 pb-4">
+            <div className="w-20 h-20 mb-2 transform hover:scale-110 transition-transform duration-300">
+              <img
+                src="/VISTA.png"
+                alt="VISTA"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <h2 className="text-2xl font-black text-ustp-navy tracking-tighter">
+              VISTA
+            </h2>
+            <p className="text-xs text-gray-400 font-medium">
+              Track Your Docs.
+            </p>
+          </div>
         </div>
       </main>
     </div>

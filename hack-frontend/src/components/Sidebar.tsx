@@ -101,7 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
                     {isSidebarOpen ? <X size={22} /> : <Menu size={22} />}
                 </button>
                 <div className="flex items-center gap-2">
-                    <img src="/vistalogo.png" alt="Logo" className="w-7 h-7" />
+                    <img src="/VISTA.png" alt="Logo" className="w-8 h-8 object-contain" />
                     <span className="font-bold tracking-tight text-white">VISTA</span>
                 </div>
                 <div className="w-10"></div>
@@ -146,6 +146,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
                 </nav>
 
                 <div className="lg:hidden mt-auto border-t border-white/10 pt-8">
+                    <div className="flex flex-col items-center opacity-80 pb-4">
+                        <img src="/VISTA.png" alt="VISTA" className="w-16 h-16 object-contain mb-2" />
+                        <span className="text-xl font-bold text-white tracking-tight">VISTA</span>
+                    </div>
                     <AdminProfile {...adminData} variant="dark" />
                 </div>
             </aside>
@@ -178,8 +182,8 @@ const NavItem = ({
     <div
         onClick={disabled ? undefined : onClick}
         className={`flex items-center gap-4 cursor-pointer group transition-all duration-200 ${active
-                ? "opacity-100 translate-x-2"
-                : "opacity-60 hover:opacity-100 hover:translate-x-1"
+            ? "opacity-100 translate-x-2"
+            : "opacity-60 hover:opacity-100 hover:translate-x-1"
             } ${className} ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
     >
         <div

@@ -145,11 +145,10 @@ const OrganizationDetailPage = () => {
                   {organization.abbreviation || "No abbreviation"}
                 </p>
                 <span
-                  className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold border ${
-                    organization.is_active
+                  className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold border ${organization.is_active
                       ? "bg-green-50 text-green-600 border-green-100"
                       : "bg-amber-50 text-amber-600 border-amber-100"
-                  }`}
+                    }`}
                 >
                   {organization.is_active ? "Active" : "Inactive"}
                 </span>
@@ -170,7 +169,7 @@ const OrganizationDetailPage = () => {
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
               {updateOrg.error instanceof AxiosError
                 ? (updateOrg.error.response?.data as { message?: string })?.message ??
-                  "Failed to update organization."
+                "Failed to update organization."
                 : "An error occurred."}
             </div>
           )}
@@ -268,6 +267,21 @@ const OrganizationDetailPage = () => {
 
         <div className="hidden lg:flex w-80 border-l border-gray-100 pl-8 pt-4 flex-col items-center">
           <AdminProfile {...adminData} variant="light" />
+          <div className="mt-auto flex flex-col items-center opacity-80 pb-4">
+            <div className="w-20 h-20 mb-2 transform hover:scale-110 transition-transform duration-300">
+              <img
+                src="/VISTA.png"
+                alt="VISTA"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <h2 className="text-2xl font-black text-ustp-navy tracking-tighter">
+              VISTA
+            </h2>
+            <p className="text-xs text-gray-400 font-medium">
+              Track Your Docs.
+            </p>
+          </div>
         </div>
       </main>
     </div>
