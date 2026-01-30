@@ -32,7 +32,7 @@ const AdminDashboard = () => {
   const { data: currentUser } = useCurrentUser();
 
   const { data: allDocuments } = useDocuments({});
-  const { data: pendingDocs } = useDocuments({ status: "Under Review" });
+  const { data: pendingDocs } = useDocuments({ status: ["Received", "Under Review"] });
   const { data: rejectedDocs } = useDocuments({ status: "Rejected" });
   const { data: approvedDocs } = useDocuments({ status: "Approved" });
   const { data: organizations } = useOrganizations();

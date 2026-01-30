@@ -8,6 +8,7 @@
  * Student org users can only view their organization's documents.
  * Status updates trigger email notifications to document submitters.
  */
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDocumentRequest;
@@ -43,7 +44,12 @@ class DocumentController extends Controller
         }
 
         if ($request->has('status')) {
-            $query->where('status', $request->status);
+            $statuses = $request->status;
+            if (is_array($statuses)) {
+                $query->whereIn('status', $statuses);
+            } else {
+                $query->where('status', $statuses);
+            }
         }
 
         if ($request->has('organization_id')) {
@@ -58,9 +64,9 @@ class DocumentController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('event_name', 'like', "%{$search}%")
-                  ->orWhereHas('organization', function ($q) use ($search) {
-                      $q->where('name', 'like', "%{$search}%");
-                  });
+                    ->orWhereHas('organization', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -188,4 +194,3 @@ class DocumentController extends Controller
         }
     }
 }
-

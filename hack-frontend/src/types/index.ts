@@ -212,7 +212,7 @@ export interface PaginatedResponse<T> {
 // ==================== API QUERY PARAMETERS ====================
 
 export interface DocumentQueryParams {
-  status?: DocumentStatus;
+  status?: DocumentStatus | DocumentStatus[];
   organization_id?: number;
   document_type_id?: number;
   search?: string;
