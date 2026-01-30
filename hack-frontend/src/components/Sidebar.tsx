@@ -68,12 +68,23 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
     },
   ];
 
-  // 2. Handle Logout Logic
-  const handleLogout = () => {
-    // Add any cleanup logic here (e.g., localStorage.clear())
-    setIsSidebarOpen(false);
-    navigate("/"); // Redirect to Login
-  };
+    return (
+        <>
+            {/* MOBILE HEADER */}
+            <div className="lg:hidden fixed top-0 left-0 right-0 bg-ustp-navy/80 backdrop-blur-xl border-b border-white/5 h-16 px-4 flex items-center justify-between z-50">
+                <button
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    className="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl text-white transition-all active:scale-95"
+                    aria-label="Toggle Menu"
+                >
+                    {isSidebarOpen ? <X size={22} /> : <Menu size={22} />}
+                </button>
+                <div className="flex items-center gap-2">
+                    <img src="/VISTA.png" alt="Logo" className="w-7 h-7" />
+                    <span className="font-bold tracking-tight text-white">VISTA</span>
+                </div>
+                <div className="w-10"></div>
+            </div>
 
   return (
     <>
@@ -104,7 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
             >
                 <div className="flex items-center gap-3 pl-2 group cursor-pointer" onClick={() => navigate("/dashboard")}>
                     <div className="w-10 h-10 transition-transform duration-300 group-hover:scale-110">
-                        <img src="/vistalogo.png" alt="VISTA" className="w-full h-full object-contain" />
+                        <img src="/VISTA.png" alt="VISTA" className="w-full h-full object-contain" />
                     </div>
                     <span className="text-2xl font-black tracking-tighter text-white">VISTA</span>
                 </div>

@@ -81,7 +81,7 @@ const NewDocumentPage = () => {
                 <div className="hidden lg:flex w-80 border-l border-gray-100 pl-8 pt-4 flex-col items-center">
                     <AdminProfile {...adminData} variant="light" />
                     <div className="mt-auto flex flex-col items-center opacity-80 pb-4">
-                        <img src="/vistalogo.png" alt="VISTA" className="w-20 h-20 mb-2 object-contain" />
+                        <img src="/VISTA.png" alt="VISTA" className="w-20 h-20 mb-2 object-contain" />
                         <h2 className="text-2xl font-black text-ustp-navy tracking-tighter">VISTA</h2>
                         <p className="text-xs text-gray-400 font-medium">Track Your Docs.</p>
                     </div>

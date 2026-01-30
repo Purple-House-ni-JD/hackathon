@@ -171,7 +171,7 @@ const ActivityPage = () => {
           <div className="mt-auto flex flex-col items-center opacity-80 pb-4">
             <div className="w-20 h-20 mb-2">
               <img
-                src="/vistalogo.png"
+                src="/VISTA.png"
                 alt="VISTA"
                 className="w-full h-full object-contain"
               />
