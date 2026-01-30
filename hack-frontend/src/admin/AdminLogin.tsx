@@ -198,7 +198,7 @@ const AdminLogin = () => {
                   <span>Verifying...</span>
                 </>
               ) : (
-                "Access Dashboard"
+                "Login"
               )}
             </button>
           </form>
