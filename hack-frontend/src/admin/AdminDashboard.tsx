@@ -1,11 +1,11 @@
 /**
  * Admin Dashboard - Integrated with Backend API
- * 
+ *
  * Displays real-time statistics using React Query hooks:
  * - useDocuments: Fetches document counts with different status filters
  * - useOrganizations: Fetches active organization count
  * - useOffices: Fetches office count
- * 
+ *
  * The dashboard makes multiple parallel queries to gather statistics.
  * Loading and error states are handled gracefully with skeleton loaders
  * and error messages. Data is automatically refetched when stale.
@@ -30,11 +30,11 @@ import { useCurrentUser } from "../hooks/useAuth";
 
 const AdminDashboard = () => {
   const { data: currentUser } = useCurrentUser();
-  
+
   const { data: allDocuments } = useDocuments({});
-  const { data: pendingDocs } = useDocuments({ status: 'Under Review' });
-  const { data: rejectedDocs } = useDocuments({ status: 'Rejected' });
-  const { data: approvedDocs } = useDocuments({ status: 'Approved' });
+  const { data: pendingDocs } = useDocuments({ status: "Under Review" });
+  const { data: rejectedDocs } = useDocuments({ status: "Rejected" });
+  const { data: approvedDocs } = useDocuments({ status: "Approved" });
   const { data: organizations } = useOrganizations();
   const { data: offices } = useOffices();
 
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
 
   const adminData = {
     email: currentUser?.email || "Loading...",
-    role: currentUser?.user_type === 'admin' ? "Super Admin" : "Student Org",
+    role: currentUser?.user_type === "admin" ? "Super Admin" : "Student Org",
     department: "Student Affairs",
     avatarUrl:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&q=80",
@@ -98,9 +98,7 @@ const AdminDashboard = () => {
 
           <div>
             <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-2">
-              <h3 className="text-lg font-bold text-gray-700">
-                Overview
-              </h3>
+              <h3 className="text-lg font-bold text-gray-700">Overview</h3>
               <span className="text-gray-400 text-2xl pb-1 leading-none cursor-pointer hover:text-ustp-navy transition-colors">
                 ...
               </span>
