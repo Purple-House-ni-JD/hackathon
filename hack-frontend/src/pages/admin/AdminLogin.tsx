@@ -40,7 +40,7 @@ const Login = () => {
             <div className="w-32 h-32 bg-gradient-to-tr from-white/10 to-transparent rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-inner border border-white/20">
               {/* Image Logic: Uses public folder path or fallback icon */}
               <img
-                src="/vista-logo.png"
+                src="/VISTA.png"
                 alt="VISTA Logo"
                 className="w-97 h-97 object-contain drop-shadow-lg"
                 onError={(e) => {

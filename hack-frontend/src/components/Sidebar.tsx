@@ -79,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
                     {isSidebarOpen ? <X size={22} /> : <Menu size={22} />}
                 </button>
                 <div className="flex items-center gap-2">
-                    <img src="/vistalogo.png" alt="Logo" className="w-7 h-7" />
+                    <img src="/VISTA.png" alt="Logo" className="w-7 h-7" />
                     <span className="font-bold tracking-tight text-white">VISTA</span>
                 </div>
                 <div className="w-10"></div>
@@ -96,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab }) => {
             >
                 <div className="flex items-center gap-3 pl-2 group cursor-pointer" onClick={() => navigate("/dashboard")}>
                     <div className="w-10 h-10 transition-transform duration-300 group-hover:scale-110">
-                        <img src="/vistalogo.png" alt="VISTA" className="w-full h-full object-contain" />
+                        <img src="/VISTA.png" alt="VISTA" className="w-full h-full object-contain" />
                     </div>
                     <span className="text-2xl font-black tracking-tighter text-white">VISTA</span>
                 </div>
